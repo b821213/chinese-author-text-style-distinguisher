@@ -11,4 +11,3 @@ with open(in_file, 'r', encoding='big5', errors='ignore') as f:
 with open(out_file, 'w') as f:
     f.write(output)
 
-
