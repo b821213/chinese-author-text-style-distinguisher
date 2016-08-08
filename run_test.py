@@ -27,19 +27,7 @@ def get_features(dic_list, feature_list, use_list):
             X.append(dic_x)
     return X
 
-def test(test_X, test_Y, model):
-    y_pred = model.predict(test_X)
-    acc = (sum([1 if test_Y[i] == y_pred[i] else 0
-            for i in range(len(test_X))]) / len(y_pred))
-    return acc, y_pred
-
-def train_set(to_train, nu, gamma=None):
-    train_X = []
-    for filenames in to_train:
-        train_X += get_features(filenames, feature_list, True)
-    if len(train_X) % 2 > 0:
-        import random
-        train_X = train_X + [train_X[random.randint(0, len(train_X) - 1)]]
+def train(train_X, nu, gamma):
     if gamma is not None:
         classifier = svm.OneClassSVM(gamma=gamma, nu=nu, kernel='rbf')
     else:
@@ -47,7 +35,22 @@ def train_set(to_train, nu, gamma=None):
     classifier.fit(train_X)
     return classifier
 
-def test_set(to_test, model):
+def test(test_X, test_Y, model):
+    y_pred = model.predict(test_X)
+    acc = (sum([1 if test_Y[i] == y_pred[i] else 0
+            for i in range(len(test_X))]) / len(y_pred))
+    return acc, y_pred
+
+def train_set(to_train, feature_list, nu, gamma=None):
+    train_X = []
+    for filenames in to_train:
+        train_X += get_features(filenames, feature_list, True)
+    if len(train_X) % 2 > 0:
+        import random
+        train_X = train_X + [train_X[random.randint(0, len(train_X) - 1)]]
+    return train(train_X, nu, gamma)
+
+def test_set(to_test, feature_list, model):
     res = []
     for filenames in to_test:
         test_X = get_features(filenames, feature_list, True)
@@ -79,9 +82,9 @@ if __name__ == '__main__':
     acc_book = []
     for i in range(len(train_data)):
         to_train = train_data[: i] + train_data[i + 1 :]
-        model = train_set(to_train, 0.5, gamma=0.03)
+        model = train_set(to_train, feature_list, 0.5, gamma=0.03)
         to_test = [train_data[i]]
-        acc, y_pred = test_set(to_test, model)[0]
+        acc, y_pred = test_set(to_test, feature_list, model)[0]
         acc_book.append(acc)
         acc_all.append(y_pred)
     print ('Cross validation result:')
@@ -95,10 +98,10 @@ if __name__ == '__main__':
     print ('Book-wise accuracy: %r' % (sum(acc_book) / len(acc_book)))
     # Real training
     to_train = train_data
-    model = train_set(to_train, 0.5, gamma=0.03)
+    model = train_set(to_train, feature_list, 0.5, gamma=0.03)
     to_test = jinyung_all + other_martials + other_types
     to_test_name = jinyung_all_name + other_martials_name + other_types_name
-    for i, (acc, y_pred) in enumerate(test_set(to_test, model)):
+    for i, (acc, y_pred) in enumerate(test_set(to_test, feature_list, model)):
         print (to_test_name[i], ':', acc * 100,
                 '(%d/%d)' % (count(y_pred, 1), len(y_pred)))
         print (y_pred)
