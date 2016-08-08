@@ -46,7 +46,7 @@ if __name__ == '__main__':
     split_res = splitter(X, [len(neg_X), len(pos_X), len(bm), len(lchen)])
     colors = ['m', 'g', 'y', 'r']
     scales = [20, 20, 50, 50]
-    labels = ['pos', 'neg', 'bma', 'lchen']
+    labels = ['neg', 'pos', 'bma', 'lchen']
     ax = plt.subplot(111, projection='3d')
     for i in range(len(split_res)):
         x = [p[0] for p in split_res[i]]
