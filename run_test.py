@@ -79,6 +79,8 @@ def train_set(to_train, feature_list, nu, gamma=None):
     train_X = []
     for filenames in to_train:
         train_X += get_features(filenames, feature_list, True)
+    # The following part is for an unsolved bug in LibSVM.
+    # Please see https://github.com/cjlin1/libsvm/issues/69 for details.
     if len(train_X) % 2 > 0:
         import random
         train_X = train_X + [train_X[random.randint(0, len(train_X) - 1)]]
