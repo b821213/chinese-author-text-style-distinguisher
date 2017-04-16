@@ -31,4 +31,5 @@
 
 技術細節
 ========
-想獲得詳盡的說明，或者了解這個作品的更多延伸功能，請閱讀下篇內容。(連結待補)
+想獲得詳盡的說明，或者了解這個作品的更多延伸功能，請閱讀下篇內容。
+https://drive.google.com/open?id=0B3AB2cDxZCwhQ3lDWHlCNUpxWlNyMldqRUJpUXdKcWVsX3Bv
